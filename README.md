@@ -12,6 +12,7 @@ Works with Standard Raspbian dystribution https://www.raspberrypi.org/downloads/
 
 ### Installing
 
+sudo apt-get install python-dev
 
 
 ## Running the tests
