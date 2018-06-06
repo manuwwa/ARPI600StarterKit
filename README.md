@@ -33,14 +33,6 @@ Works with Standard Raspbian dystribution https://www.raspberrypi.org/downloads/
 
 
 
-
-
-
-
-## Authors
-
-
-
 ## License
 
 This project is licensed under the GNU License.
