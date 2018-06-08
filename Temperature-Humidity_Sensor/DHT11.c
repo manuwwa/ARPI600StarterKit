@@ -1,20 +1,15 @@
 
-#include <stdio.h>
+#include <python2.7/Python.h>
 #include<wiringPi.h>
-#include <python3.5/Python.h>
+
 
 
 static PyObject *
-DHT11_Readpy(PyObject *self, PyObject *PinNumber)
+dht11_Readpy(PyObject *self)
 {
-	int retnum=0;
-	int Pin=0;
-	    if (!PyArg_ParseTuple(PinNumber, "1", &Pin))
-        return NULL;
-	char *temperature;
+	int Pin=1;
+	char *temperature; 
 	char *humidity;
-	*temperature=0;
-	*humidity=0;
 		unsigned char t,i,j;
 	unsigned char buf[5]={0,0,0,0,0};
 	pinMode(Pin,OUTPUT); 	    //SET OUTPUT
@@ -30,14 +25,14 @@ DHT11_Readpy(PyObject *self, PyObject *PinNumber)
 		t++;
 		delayMicroseconds(1);
 	};	 
-	if(t >= 100)retnum= 1;
+	if(t >= 100)return Py_BuildValue("iii",1,0,0);  
 	t = 0;
     while (!digitalRead(Pin) && t<100)//DHT11 Pull up 80us
 	{
 		t++;
 		delayMicroseconds(1);
 	};
-	if(t >= 100)retnum= 1;	    
+	if(t >= 100)return Py_BuildValue("iii",1,1,0);    
 	for(i=0;i < 5;i++)
 	{
 		buf[i] = 0;
@@ -50,106 +45,45 @@ DHT11_Readpy(PyObject *self, PyObject *PinNumber)
 				t++;
 				delayMicroseconds(1);
 			}
-			if(t >= 100) retnum= 1;
+			if(t >= 100)return Py_BuildValue("iii",1,2,0);
 			t = 0;
 			while(!digitalRead(Pin) && t <100)
 			{
 				t++;
 				delayMicroseconds(1);
 			}
-			if(t >= 100) retnum= 1;
+			if(t >= 100)return Py_BuildValue("iii",1,3,0);
 			delayMicroseconds(40);
 			if(digitalRead(Pin))
 				buf[i] += 1;
 		}
 	}
-	if(buf[0]+buf[1]+buf[2]+buf[3]!=buf[4])retnum= 2;
+	if(buf[0]+buf[1]+buf[2]+buf[3]!=buf[4])return Py_BuildValue("iii",2,0,0);
 	*humidity = buf[0];
 	*temperature =buf[2];
-	retnum= 0;
+
 	
-	return Py_BuildValue("iii",retnum,*temperature,*humidity);
+	return Py_BuildValue("iii",0,*temperature,*humidity);
 }
-char DHT11_Read(char *temperature,char *humidity, int Pin)	   
-{                 
-	unsigned char t,i,j;
-	unsigned char buf[5]={0,0,0,0,0};
-	pinMode(Pin,OUTPUT); 	    //SET OUTPUT
-	pullUpDnControl(Pin,PUD_UP);
-    digitalWrite(Pin,0); 	    //Pin=0
-    delay(20);         	        //Pull down Least 18ms
-    digitalWrite(Pin,1); 	    //Pin =1
-	delayMicroseconds(30);     	//Pull up 20~40us
-	pinMode(Pin,INPUT);        //SET INPUT
-	
-    while (digitalRead(Pin) && t <100)//DHT11 Pull down 80us
-	{
-		t++;
-		delayMicroseconds(1);
-	};	 
-	if(t >= 100)return 1;
-	t = 0;
-    while (!digitalRead(Pin) && t<100)//DHT11 Pull up 80us
-	{
-		t++;
-		delayMicroseconds(1);
-	};
-	if(t >= 100)return 1;	    
-	for(i=0;i < 5;i++)
-	{
-		buf[i] = 0;
-		for(j=0;j<8;j++)
-		{
-			buf[i] <<= 1;
-			t = 0;
-			while(digitalRead(Pin) && t < 100)
-			{
-				t++;
-				delayMicroseconds(1);
-			}
-			if(t >= 100) return 1;
-			t = 0;
-			while(!digitalRead(Pin) && t <100)
-			{
-				t++;
-				delayMicroseconds(1);
-			}
-			if(t >= 100) return 1;
-			delayMicroseconds(40);
-			if(digitalRead(Pin))
-				buf[i] += 1;
-		}
-	}
-	if(buf[0]+buf[1]+buf[2]+buf[3]!=buf[4])return 2;
-	*humidity = buf[0];
-	*temperature =buf[2];
-	return 0;
-} 
-
-
-int main(void)
+static PyObject *
+mywiringPiSetup(PyObject *self)
 {
-	PyObject pinPy=Py_BuildValue("i",1);
-	char temperature;  	    
-	char humidity; 
-	char value;
-
-	if (wiringPiSetup() < 0)return 1;
-	printf("Waveshare!\r\n");
-	
-  	while(1)
-	{
-		value = DHT11_Read(&temperature,&humidity,1);	
-		if(value == 0)
-		{ 
-			printf("\ntemperature = %d\r\n",temperature);
-			printf("humidity    = %d\r\n",humidity);
-		}
-		else if (value == 2)
-		 	printf("\ncheck sum err\n");
-		else
-			printf("\ntime out\n");
- 		delay(1000);
-	}
+	if (wiringPiSetup() < 0)Py_BuildValue("i",1);
+	return Py_BuildValue("i",0);
 }
+static PyMethodDef dht11Methods[] = {
+	    {"mywiringPiSetup", mywiringPiSetup, METH_VARARGS, "Greet an entity."},
+    {"dht11_Readpy", dht11_Readpy, METH_VARARGS, "Greet an entity."},
+    {NULL, NULL, 0, NULL}
+};
+
+PyMODINIT_FUNC
+initdht11py()
+{
+   
+
+   Py_InitModule("dht11py", dht11Methods);
+
+}
+
 
