@@ -6,7 +6,7 @@ module1 = Extension('dht11py',
                     include_dirs = ['/usr/local/include'],
                     libraries = ['wiringPi'],
                     library_dirs = ['/usr/local/lib'],
-                    sources = ['DHT11.c'])
+                    sources = ['MainLib.c'])
 
 setup (name = 'dht11py',
        version = '1.0',
