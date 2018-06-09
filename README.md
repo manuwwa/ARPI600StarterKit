@@ -13,16 +13,19 @@ Works with Standard Raspbian dystribution https://www.raspberrypi.org/downloads/
 ### Installing
 
 >sudo apt-get install python-dev
+
 Download and unpack
 in main folder run
+
 >sudo python setup.py install
+
 
 ## Running 
 
 running example shown in exampe.py file
->import dht11py;
->dht11py.mywiringPiSetup();
->print dht11py.dht11_Readpy();
+>import dht11py
+>dht11py.mywiringPiSetup()
+>print dht11py.dht11_Readpy()
 
 ### Break down into end to end tests
 
