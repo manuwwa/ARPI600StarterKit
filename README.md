@@ -23,24 +23,12 @@ in main folder run
 ## Running 
 
 running example shown in exampe.py file
+Import lib
 >import dht11py
+Setup wiringPi lib
 >dht11py.mywiringPiSetup()
+use implemented method
 >print dht11py.dht11_Readpy()
-
-### Break down into end to end tests
-
-
-### And coding style tests
-
-
-
-## Deployment
-
-
-
-## Built With
-
-GCC compiler
 
 ## License
 
