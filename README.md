@@ -24,10 +24,15 @@ in main folder run
 
 running example shown in exampe.py file
 Import lib
+
 >import dht11py
+
 Setup wiringPi lib
+
 >dht11py.mywiringPiSetup()
+
 use implemented method
+
 >print dht11py.dht11_Readpy()
 
 ## License
