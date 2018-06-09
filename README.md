@@ -10,6 +10,8 @@ Project contains librery in C for simple use DHT11 temperature sensor
 
 Works with Standard Raspbian dystribution https://www.raspberrypi.org/downloads/raspbian/
 
+Python 2.7 only
+
 ### Installing
 
 >sudo apt-get install python-dev
