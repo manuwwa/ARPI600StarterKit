@@ -1,6 +1,6 @@
-# Project Title
+# DHT11ClibForPython
 
-Project contains librerys compiled in C that allows to use ARPI600 starter kit sensors with python 
+Project contains librery in C for simple use DHT11 temperature sensor
 
 ## Getting Started
 
@@ -12,12 +12,17 @@ Works with Standard Raspbian dystribution https://www.raspberrypi.org/downloads/
 
 ### Installing
 
-sudo apt-get install python-dev
+>sudo apt-get install python-dev
+Download and unpack
+in main folder run
+>sudo python setup.py install
 
+## Running 
 
-## Running the tests
-
-
+running example shown in exampe.py file
+>import dht11py;
+>dht11py.mywiringPiSetup();
+>print dht11py.dht11_Readpy();
 
 ### Break down into end to end tests
 
@@ -32,7 +37,7 @@ sudo apt-get install python-dev
 
 ## Built With
 
-
+GCC compiler
 
 ## License
 
